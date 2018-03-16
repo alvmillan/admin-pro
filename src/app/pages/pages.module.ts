@@ -9,6 +9,8 @@ import { SharedModule } from '../shared/shared.module';
 import { PAGES_ROUTES } from './pages.routes';
 import { IncrementadorComponent } from '../components/incrementador/incrementador.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
+import { PromesasComponent } from './promesas/promesas.component';
+import { RxjsComponent } from './rxjs/rxjs.component';
 
 
 @NgModule({
@@ -18,7 +20,9 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
         DashboardComponent,
         ProgressComponent,
         Graficas1Component,
-        AccountSettingsComponent
+        AccountSettingsComponent,
+        PromesasComponent,
+        RxjsComponent
     ],
     exports: [
         DashboardComponent,

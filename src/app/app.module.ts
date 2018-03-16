@@ -11,7 +11,7 @@ import { RegisterComponent } from './login/register.component';
 
 // Rutas
 import { APP_ROUTES } from './app.routes';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartsModule } from 'ng2-charts';
 import { ServiceModule } from './services/service.module';
 
@@ -26,6 +26,7 @@ import { ServiceModule } from './services/service.module';
     PagesModule,
     APP_ROUTES,
     FormsModule,
+    ReactiveFormsModule,
     ChartsModule,
     ServiceModule
   ],
