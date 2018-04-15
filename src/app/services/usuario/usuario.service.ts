@@ -114,7 +114,7 @@ export class UsuarioService {
     url += '?token=' + this.token;
     return this.http.delete(url)
       .map( resp => {
-        swal('Usuario borrado0', 'El usuario ha sido eliminado correctamente', 'success');
+        swal('Usuario borrado', 'El usuario ha sido eliminado correctamente', 'success');
         return true;
       });
    }
