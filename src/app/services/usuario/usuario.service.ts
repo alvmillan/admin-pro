@@ -3,14 +3,17 @@ import { Usuario } from '../../models/usuario.model';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config/config';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
 import { Router } from '@angular/router';
 import { SubirArchivoService } from '../subir-archivo/subir-archivo.service';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class UsuarioService {
 
   token: string;
   usuario: Usuario;
+  menu: any = [];
 
   constructor(public http: HttpClient,
               public router: Router,
@@ -25,8 +28,10 @@ export class UsuarioService {
    logout() {
      this.usuario = null;
      this.token = '';
+     this.menu = [];
      localStorage.removeItem('token');
      localStorage.removeItem('usuario');
+     localStorage.removeItem('menu');
      this.router.navigate(['/login']);
    }
 
@@ -34,9 +39,11 @@ export class UsuarioService {
      if ( localStorage.getItem('token')) {
        this.token = localStorage.getItem('token');
        this.usuario = JSON.parse(localStorage.getItem('usuario'));
+      //  this.menu = JSON.parse(localStorage.getItem('menu'));
      } else {
        this.token = '';
        this.usuario = null;
+       this.menu = [];
      }
    }
 
@@ -47,6 +54,10 @@ export class UsuarioService {
       .map( (resp: any) => {
         swal('Usuario creado', usuario.correo, 'success');
         return resp.usuario;
+      })
+      .catch( err => {
+        swal( err.error.mensaje, err.error.errors.message, 'error');
+        return Observable.throw( err );
       });
    }
 
@@ -60,11 +71,18 @@ export class UsuarioService {
       const url = URL_SERVICIOS + '/login';
       return this.http.post(url, usuario)
         .map( (resp: any) => {
+          console.log(resp);
           localStorage.setItem('id', resp.id);
           localStorage.setItem('token', resp.token);
           localStorage.setItem('usuario', JSON.stringify(resp.usuario));
+          localStorage.setItem('menu', JSON.stringify(resp.menu));
           this.token = resp.token;
+          this.menu = resp.menu;
           return true;
+        })
+        .catch( err => {
+          swal( 'Error en el login', err.error.mensaje, 'error');
+          return Observable.throw( err );
         });
 
    }
@@ -78,11 +96,16 @@ export class UsuarioService {
           const usuarioDB: Usuario = resp.usuario;
           localStorage.setItem('id', usuarioDB._id);
           localStorage.setItem('usuario', JSON.stringify(usuarioDB));
+          localStorage.setItem('menu', JSON.stringify(usuarioDB));
         }
         swal('Usuario actualizado', usuario.nombre, 'success');
         return true;
       }
-    );
+    )
+    .catch( err => {
+      swal( err.error.mensaje, err.error.errors.message, 'error');
+      return Observable.throw( err );
+    });
    }
 
    cambiarImagen(file: File, id: string ) {
